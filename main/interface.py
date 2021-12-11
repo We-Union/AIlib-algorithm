@@ -35,25 +35,27 @@ def main(data : str=None, model : str=None, param : dict=None):
             img = url_imread(img_url)
         except:
             return {
-                "err_code" : 2,
+                "code" : 2,
                 "output_img_url" : None,
-                "output_text" : None
+                "output_text" : None,
+                "msg":"读取图床图片失败",
             }
 
         if not check_func_params(register_cv_algorithm[model], param):
             return {
-                "err_code" : 4,
+                "code" : 4,
                 "output_img_url" : None,
-                "output_text" : None
+                "output_text" : None,
+                "msg":"参数与模型不匹配",
             }
         
         output_image = register_cv_algorithm[model](img, **param)
         url = upload_sm(global_token, output_image)
 
         return {
-            "err_code" : 0,
+            "code" : 0,
             "output_img_url" : url,
-            "output_text" : None 
+            "output_text" : ""
         }
 
     elif model in register_multi_cv_algorithm:
@@ -62,9 +64,10 @@ def main(data : str=None, model : str=None, param : dict=None):
         ...
     else:
         return {
-            "err_code" : 1,
+            "code" : 1,
             "output_img_url" : None,
-            "output_text" : None
+            "output_text" : None,
+            "msg":"输入模型不在已注册模型列表",
         }
 
 main()

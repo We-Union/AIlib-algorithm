@@ -16,16 +16,22 @@ def get_sm_token():
         raise AssertionError("获取图床token失败"+ str(response.json()['message']))
 
 def upload_sm(token, img):
+
     img = Image.fromarray(img)  
     bytes_io = BytesIO()                # 创建一个BytesIO
-    img.save(bytes_io, format='JPEG')   # 写入output_buffer
+    img.convert("RGB").save(bytes_io, format='JPEG')   # 写入output_buffer
     headers = {'Authorization': token}
     params = dict()
     params['smfile'] = bytes_io.getvalue()
     response = requests.post('https://sm.ms/api/v2/upload', files=params, headers=headers)
-    if response.json()['success']:
-        url = response.json()['data']['url']
+    response = response.json()
+
+    if response['success']:
+        url = response['data']['url']
         return url
     else:
-        raise AssertionError("图片上传失败" + str(response.json()['message']))
+        if response['code'] == "image_repeated":
+            return response['images']
+        else:
+            raise AssertionError("图片上传失败" + str(response.json()['message']))
 
