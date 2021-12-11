@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2 as cv
 
-from CV import transform_to_painting
-from CV.utils import show_image, url_imread
+from algorithm.CV import transform_to_painting
+from algorithm.CV.utils import show_image, url_imread
 from my_io import upload_sm, get_sm_token
 
 def test_sm(img):

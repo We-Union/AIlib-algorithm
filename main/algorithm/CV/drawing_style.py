@@ -3,11 +3,18 @@ import numpy as np
 from main.algorithm.CV.utils import show_image
 import cv2 as cv
 
-def transform_to_painting(img, depth=100):
+def transform_to_painting(img, depth=100, blur=False, blur_size=3, blur_std=1, denoise=False, denoise_size=3):
     """
         depth : [0, 100]
     """
+
+    if blur_size % 2 == 0:
+        blur_size += 1
+
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    if blur:
+        img = cv.GaussianBlur(img, ksize=(blur_size, blur_size), sigmaX=blur_std)
+
     grad = np.gradient(img) # 取图像灰度的梯度
 
     grad_x, grad_y = grad # 分别取图像横纵方向灰度值的梯度值
@@ -26,6 +33,9 @@ def transform_to_painting(img, depth=100):
     dz = np.sin(vec_el) #光源对z轴的影响因子
 
     b = 255 * (dx * uni_x + dy * uni_y + dz * uni_z) #将各方向的梯度分别乘上虚拟光源对各方向的影响因子，将梯度还原成灰度
-    b = b.clip(0, 255) #舍弃溢出的灰度值
-    return b
+    img = b.clip(0, 255) #舍弃溢出的灰度值
+    img = np.array(img, dtype="uint8")
+    if denoise:
+        img = cv.medianBlur(img, ksize=denoise_size)
+    return img
 
