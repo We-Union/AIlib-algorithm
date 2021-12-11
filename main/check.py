@@ -1,5 +1,5 @@
 import inspect
-from CV import transform_to_painting
+from algorithm.CV import transform_to_painting
 
 def check_func_params(f, param : dict) -> bool:
     f_parser = inspect.getargspec(f)

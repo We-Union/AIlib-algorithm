@@ -1,9 +1,16 @@
 import numpy as np
 import cv2 as cv
 
+import sys
+from pprint import pprint
+
+for path in sys.path:
+    if path[0] in ['e', 'E']:
+        print(path)
+
 from my_io import get_sm_token, upload_sm
-from CV import transform_to_painting, url_imread, show_image
-from NLP import *
+from algorithm.CV import transform_to_painting, url_imread, show_image
+from algorithm.NLP import *
 from check import check_func_params
 
 
