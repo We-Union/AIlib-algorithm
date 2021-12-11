@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-from algorithm.CV.utils import show_image
+from main.algorithm.CV.utils import show_image
 import cv2 as cv
 
 def transform_to_painting(img, depth=100):

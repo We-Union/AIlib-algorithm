@@ -8,10 +8,10 @@ for path in sys.path:
     if path[0] in ['e', 'E']:
         print(path)
 
-from my_io import get_sm_token, upload_sm
-from algorithm.CV import transform_to_painting, url_imread, show_image
-from algorithm.NLP import *
-from check import check_func_params
+from main.my_io import get_sm_token, upload_sm
+from main.algorithm.CV import transform_to_painting, url_imread, show_image
+from main.algorithm.NLP import *
+from main.check import check_func_params
 
 
 register_cv_algorithm = {

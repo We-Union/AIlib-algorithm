@@ -4,5 +4,5 @@ __all__ = [
     "utils.py"
 ]
 
-from algorithm.CV.drawing_style import transform_to_painting
-from algorithm.CV.utils import url_imread, show_image, resize
+from main.algorithm.CV.drawing_style import transform_to_painting
+from main.algorithm.CV.utils import url_imread, show_image, resize

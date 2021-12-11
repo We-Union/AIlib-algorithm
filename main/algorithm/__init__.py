@@ -1,4 +1,4 @@
 __version__ = "0.0.0"
 
-from algorithm import CV
-from algorithm import NLP
+from main.algorithm import CV
+from main.algorithm import NLP
