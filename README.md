@@ -36,7 +36,7 @@ def interface(data : str, model : str, param : dict):
 |`output_text`|处理得到的文本|
 |`msg`|如果错误，展现当前错误的问题|
 
-##
+## 错误码
 
 | 错误码 | 说明 |
 | --- | --- |
@@ -46,5 +46,14 @@ def interface(data : str, model : str, param : dict):
 |6004|param与模型不匹配|
 |6005|未检测到符合要求的实体|
 |6100|其他未知错误|
+
+## 模型参数解释
+
+### 1. transform_to_painting（手绘风格转换）
+| 参数 | 类型值 | 范围\可选值 |默认值|备注|
+| --- | --- | --- | --- | --- |
+|depth|int|[0,100]|60|深度|
+||||
+
 
 > warning:保证CV和NLP的接口函数模块的第一个参数必须是输入数据!!!否则check会出错!!!
