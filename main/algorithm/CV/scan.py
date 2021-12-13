@@ -59,7 +59,7 @@ def scanning(img : np.ndarray, height : int = 500):
 
     # detect contour
     contours, _ = cv.findContours(edge.copy(), cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
-    contours.sort(key=cv.contourArea, reverse=True)
+    contours = sorted(contours, key=cv.contourArea, reverse=True)
     contours = contours[:5]
 
     screenCnt = None
