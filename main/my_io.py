@@ -3,8 +3,8 @@ from PIL import Image
 from io import BytesIO
 import json
 
-def get_sm_token():
-    with open("./algorithm/config.json", "r", encoding="utf-8") as fp:
+def get_sm_token(file_name):
+    with open(file_name, "r", encoding="utf-8") as fp:
         cfg = json.load(fp)
     params = {'username': cfg["username"], 'password': cfg["password"]}
     response = requests.post('https://sm.ms/api/v2/token', params)

@@ -29,7 +29,7 @@ register_nlp_algorithm = []
 
 def main(data: str = None, model: str = None, param: dict = None):
     # init
-    global_token = get_sm_token()
+    global_token = get_sm_token("algorithm/config.json")
 
     # check if cv or nlp
     if model in register_cv_algorithm:
