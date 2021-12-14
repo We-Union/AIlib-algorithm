@@ -6,7 +6,7 @@ __pycache__/
 # C extensions
 *.so
 config.json
-unit_test.py
+model
 
 # Distribution / packaging
 .Python

@@ -70,7 +70,7 @@ def scanning(img : np.ndarray, height : int = 500):
             screenCnt = approx
             break
     if screenCnt is None:
-        return 5
+        return 6005
     
     # cv.drawContours(img, [screenCnt], -1, (0, 255, 0), 2)
     # showImage(img)

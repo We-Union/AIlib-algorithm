@@ -10,13 +10,14 @@ from pprint import pprint
 
 from main.my_io import get_sm_token, upload_sm
 from main.algorithm.CV import transform_to_painting, url_imread, show_image
-from main.algorithm.CV import scanning, sift_matching
+from main.algorithm.CV import scanning, sift_matching, reconstruct
 from main.algorithm.NLP import *
-from main.check import check_func_params
+from main.check import check_func_params, check_return_code
 
 register_cv_algorithm = {
     "transform_to_painting": transform_to_painting,
-    "scanning": scanning
+    "scanning": scanning,
+    "reconstruct": reconstruct
 }
 
 register_multi_cv_algorithm = {
@@ -36,32 +37,17 @@ def main(data: str = None, model: str = None, param: dict = None):
         try:
             img = url_imread(img_url)
         except:
-            return {
-                "code": 6002,
-                "msg": "读取图床图片失败",
-                "output_img_url": "",
-                "output_text": "",
-            }
+            return check_return_code(6002)
 
         if not check_func_params(register_cv_algorithm[model], param):
-            return {
-                "code": 6004,
-                "msg": "参数与模型不匹配",
-                "output_img_url": "",
-                "output_text": "",
-
-            }
+            return check_return_code(6004)
 
         output_image = register_cv_algorithm[model](img, **param)
-        if isinstance(output_image, int):
-            if output_image == 5:
-                return {
-                    "code": 6005,
-                    "msg": "未检测到符合要求的实体",
-                    "output_img_url": "",
-                    "output_text": "",
 
-                }
+        if isinstance(output_image, int):
+            err_code = output_image
+            return check_return_code(err_code)
+
         url = upload_sm(global_token, output_image)
 
         return {
@@ -76,23 +62,12 @@ def main(data: str = None, model: str = None, param: dict = None):
         try:
             img_list = [url_imread(url) for url in img_urls]
         except:
-            return {
-                "code": 6002,
-                "msg": "读取图床图片失败",
-                "output_img_url": "",
-                "output_text": "",
-            }
+            return check_return_code(6002)
 
         if not check_func_params(register_cv_algorithm[model], param):
-            return {
-                "code": 6004,
-                "msg": "参数与模型不匹配",
-                "output_img_url": "",
-                "output_text": "",
-            }
+            return check_return_code(6004)
 
         output_image = register_cv_algorithm[model](img_list, **param)
-
         url = upload_sm(global_token, output_image)
 
         return {
@@ -105,12 +80,7 @@ def main(data: str = None, model: str = None, param: dict = None):
     elif model in register_nlp_algorithm:
         ...
     else:
-        return {
-            "code": 6001,
-            "msg": "输入模型不在已注册模型列表",
-            "output_img_url": "",
-            "output_text": "",
-        }
+        return check_return_code(6001)
 
 
 if __name__ == "__main__":
