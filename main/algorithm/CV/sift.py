@@ -28,4 +28,4 @@ def sift_matching(imgs, feature="SIFT", match_rule="brute", k=3, show_lines=30):
     match_result = sorted(match_result, key=lambda x : x.distance)
     result_img = cv.drawMatches(img1.copy(), key_p1, img2, key_p2, match_result[:show_lines], None, flags=2)    
 
-    return result_img
+    return cv.cvtColor(result_img, cv.COLOR_BGR2RGB)

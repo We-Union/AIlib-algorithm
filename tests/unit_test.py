@@ -1,3 +1,11 @@
+import sys
+import os  
+sys.path.append(os.path.abspath("."))
+# from pprint import  pprint
+
+# pprint(sys.path)
+# print(__file__)
+
 from main.algorithm.CV import scanning
 from main.algorithm.CV import transform_to_painting
 from main.algorithm.CV import show_image
@@ -13,7 +21,7 @@ def u_transform_to_painting():
     show_image(img)
 
 def u_scanning():
-    img = cv.imread("../image/book.jpg")
+    img = cv.imread("image/card.jpg")
     img = scanning(img, height=600)
     if isinstance(img, int):
         print("error code 5")
@@ -21,14 +29,17 @@ def u_scanning():
         show_image(img)
 
 def u_sift_matching():
-    img1 = cv.imread("../image/book.jpg")
-    img2 = cv.imread("../image/desktop.jpg")
+    img1 = cv.imread("image/book.jpg")
+    img2 = cv.imread("image/desktop.jpg")
     img = sift_matching([img1, img2], feature="akaze")
     show_image(img, height=600)
 
 def u_hrr():
-    img = cv.imread("../image/test2.jpg")
+    img = cv.imread("image/test2.jpg")
     result = reconstruct(img, outscale=1)
     show_image(np.concatenate([img, result], axis=1), height=600)
 
-u_hrr()
+
+# u_hrr()
+
+u_scanning()

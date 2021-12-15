@@ -1,7 +1,7 @@
 from typing import Tuple
 import cv2 as cv
 import numpy as np
-from main.algorithm.CV.utils import resize
+from main.algorithm.CV.utils import resize, show_image
 
 def point_sorted(points : np.ndarray) -> Tuple[np.ndarray]:
     """
@@ -48,19 +48,21 @@ def transform(img, points):
     transformed = cv.warpPerspective(img, M, (width, height))
     return transformed
 
-def scanning(img : np.ndarray, height : int = 500):
+def scanning(img, height=500):
     img = resize(img, height=height)
     
     # canny detection
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     gray = cv.GaussianBlur(gray, (5, 5), 0)
-    edge = cv.Canny(gray, 75, 200)
-    # showImage(edge, 'canny')
+    edge = cv.Canny(gray, 75, 100)
 
     # detect contour
     contours, _ = cv.findContours(edge.copy(), cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv.contourArea, reverse=True)
     contours = contours[:5]
+
+    # s_img = img.copy()
+    # cv.drawContours(s_img, contours, -1, (0, 255, 0), 3)
 
     screenCnt = None
     for contour in contours:
@@ -76,4 +78,4 @@ def scanning(img : np.ndarray, height : int = 500):
     # showImage(img)
     transformed = transform(img, screenCnt.reshape(4, 2))
     # showImage(transformed)
-    return transformed
+    return cv.cvtColor(transformed, cv.COLOR_BGR2RGB)

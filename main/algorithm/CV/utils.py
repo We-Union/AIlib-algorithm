@@ -8,6 +8,7 @@ def resize(img : np.ndarray, height=None, width=None) -> np.ndarray:
     if height is not None and width is not None:
         raise ValueError("not not None at the same time")
     h, w = img.shape[0], img.shape[1]
+    # print("h:",h,"w:",w,"width:",width,"height:",height)
     if height:
         width = int(w / h * height)
     else:

@@ -8,7 +8,9 @@ import torch
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-def reconstruct(img, device=DEVICE, scale=4, outscale=None):
+def reconstruct(img, device=DEVICE, scale=4, outscale=0):
+    if not torch.cuda.is_available():
+        device = torch.device('cpu')
     if scale < 3:
         return 6006
     model_state_dict = torch.load("model/reconstruct.pth")
@@ -51,7 +53,7 @@ def reconstruct(img, device=DEVICE, scale=4, outscale=None):
     out_img = out_img * 255
     out_img = out_img.round().astype('uint8')
 
-    if outscale is not None:
+    if outscale != 0:
         out_img = resize(out_img, height=int(h * outscale))
     
-    return out_img
+    return cv.cvtColor(out_img, cv.COLOR_BGR2RGB)

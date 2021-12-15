@@ -38,7 +38,6 @@ def main(data: str = None, model: str = None, param: dict = None):
             img = url_imread(img_url)
         except:
             return check_return_code(6002)
-
         if not check_func_params(register_cv_algorithm[model], param):
             return check_return_code(6004)
 

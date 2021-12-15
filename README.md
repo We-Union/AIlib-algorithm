@@ -97,8 +97,8 @@ def main(data : str, model : str, param : dict):
 | 参数     | 类型值 | 范围\可选值   | 默认值 | 备注                                                         |
 | -------- | ------ | ------------- | ------ | ------------------------------------------------------------ |
 | device   | string | "cuda", "cpu" | 自适应 | 运算设备                                                     |
-| scale    | int    | > 2           | 4      | 放大倍率                                                     |
-| outscale | float  | > 0           | none   | 输出图像和输入图像在尺寸上的倍数关系，若为none，则`outscale==scale` |
+| scale    | int    | > 2          | 4      | 放大倍率                                                     |
+| outscale | float  | > 0           | 0   | 输出图像和输入图像在尺寸上的倍数关系，若为0，则`outscale==scale` |
 
 
 

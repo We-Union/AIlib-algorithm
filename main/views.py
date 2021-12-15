@@ -1,6 +1,8 @@
 from rest_framework.views import APIView,Response
 import json
 from main.interface import main
+import traceback
+
 class MainView(APIView):
 
     def post(self, request):
@@ -9,19 +11,24 @@ class MainView(APIView):
         model = request.POST.get('model')
         data = request.POST.get('data')
         context = dict()
-        if isinstance(param, str):
-            param = json.loads(param)
+
 
         context['err_code'] = 0
-        print("param:",param)
-        print("model",model)
-        print("data",data)
         if data is None or model is None or param is None:
             context['err_code'] = 2002
             context['msg'] = "参数不足"
             return Response(context)
-        
-        context = main(data, model, param)
+        try:
+            if isinstance(param, str):
+                param = json.loads(param)
+            context = main(data, model, param)
 
-        return Response(context)
+            return Response(context)
+        except (Exception, BaseException) as e:
+            exstr = traceback.format_exc()
+            print(exstr)
+            print(e)
+            context['err_code'] = 6100
+            context['msg'] = "未知错误，请联系管理员"
+            return Response(context)
 
