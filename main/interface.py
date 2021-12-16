@@ -63,10 +63,10 @@ def main(data: str = None, model: str = None, param: dict = None):
         except:
             return check_return_code(6002)
 
-        if not check_func_params(register_cv_algorithm[model], param):
+        if not check_func_params(register_multi_cv_algorithm[model], param):
             return check_return_code(6004)
 
-        output_image = register_cv_algorithm[model](img_list, **param)
+        output_image = register_multi_cv_algorithm[model](img_list, **param)
         url = upload_sm(global_token, output_image)
 
         return {
