@@ -20,7 +20,12 @@ class MainView(APIView):
             return Response(context)
         try:
             if isinstance(param, str):
-                param = json.loads(param)
+                try:
+                    param = json.loads(param)
+                except:
+                    context['err_code'] = 2002
+                    context['msg'] = "参数无法转化为json，请检查格式"
+                    return Response(context)
             context = main(data, model, param)
 
             return Response(context)
