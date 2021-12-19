@@ -9,19 +9,26 @@ from pprint import pprint
 #         print(path)
 
 from main.my_io import get_sm_token, upload_sm
-from main.algorithm.CV import transform_to_painting, url_imread, show_image
-from main.algorithm.CV import scanning, sift_matching, reconstruct
+from main.algorithm.CV import detect_face, transform_to_painting, url_imread, show_image
+from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
+from main.algorithm.CV import ocr_val, ocr_print, equalizeHist, OSTU_split
 from main.algorithm.NLP import *
 from main.check import check_func_params, check_return_code
 
 register_cv_algorithm = {
     "transform_to_painting": transform_to_painting,
     "scanning": scanning,
-    "reconstruct": reconstruct
+    "reconstruct": reconstruct,
+    "face_detect" : detect_face,
+    "ocr_val" : ocr_val,
+    "ocr_print" : ocr_print,
+    "equalizeHist" : equalizeHist,
+    "OSTU_split" : OSTU_split
 }
 
 register_multi_cv_algorithm = {
-    "sift_matching": sift_matching
+    "sift_matching": sift_matching,
+    "stitching" : stitching
 }
 
 register_nlp_algorithm = []
