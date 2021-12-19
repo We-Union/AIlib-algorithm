@@ -1,10 +1,6 @@
 import sys
 import os  
 sys.path.append(os.path.abspath("."))
-# from pprint import  pprint
-
-# pprint(sys.path)
-# print(__file__)
 
 from main.algorithm.CV import scanning
 from main.algorithm.CV import transform_to_painting

@@ -9,11 +9,13 @@ from pprint import pprint
 #         print(path)
 
 from main.my_io import get_sm_token, upload_sm
+from main.check import check_func_params, check_return_code
+
 from main.algorithm.CV import detect_face, transform_to_painting, url_imread, show_image
 from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
 from main.algorithm.CV import ocr_val, ocr_print, equalizeHist, OSTU_split
-from main.algorithm.NLP import *
-from main.check import check_func_params, check_return_code
+from main.algorithm.NLP import kanji_cut
+
 
 register_cv_algorithm = {
     "transform_to_painting": transform_to_painting,
@@ -31,7 +33,9 @@ register_multi_cv_algorithm = {
     "stitching" : stitching
 }
 
-register_nlp_algorithm = []
+register_nlp_algorithm = {
+    "kanji_cut" : kanji_cut
+}
 
 
 def main(data: str = None, model: str = None, param: dict = None):
@@ -84,7 +88,9 @@ def main(data: str = None, model: str = None, param: dict = None):
         }
 
     elif model in register_nlp_algorithm:
-        ...
+        if len(data) == 0:
+            return check_return_code(6009)
+
     else:
         return check_return_code(6001)
 

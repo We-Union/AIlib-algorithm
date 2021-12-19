@@ -52,6 +52,7 @@ def main(data : str, model : str, param : dict):
 |6006|输入参数不在范围内|
 |6007|服务器内存占用溢出|
 |6008|服务器显存占用溢出|
+|6009|输入文本为空|
 |6100|其他未知错误|
 
 ### CV模型参数解释
@@ -170,6 +171,15 @@ def main(data : str, model : str, param : dict):
 
 ### NLP模型参数解释
 
+#### 1. kanji_cut（中文分词）
+
+输入：`text`，代表一句话。
+
+| 参数    | 类型值 | 范围\可选值 | 默认值 | 备注             |
+| ------- | ------ | ----------- | ------ | ---------------- |
+| spliter | string | any         | " "    | 输出结果的分隔符 |
+
+
 
 
 
@@ -189,6 +199,6 @@ def main(data : str, model : str, param : dict):
 访问上述链接，下载安装包，然后
 
 ```bash
-$pip install m
+$pip install muggle-ocr
 ```
 

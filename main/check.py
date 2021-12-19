@@ -63,6 +63,13 @@ def check_return_code(code):
             "output_img_url": "",
             "output_text": "",
         }
+    elif code == 6009:
+        return {
+            "code" : 6009,
+            "msg": "输入文本为空",
+            "output_img_url": "",
+            "output_text": "",
+        }
 
 if __name__ == "__main__":
     ...
