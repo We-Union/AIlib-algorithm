@@ -13,7 +13,7 @@ from main.algorithm.CV import reconstruct
 from main.algorithm.CV import detect_face
 from main.algorithm.CV import stitching
 from main.algorithm.CV import ocr_val, ocr_print
-from main.algorithm.CV import equalizeHist, OSTU_split
+from main.algorithm.CV import equalize_hist, OSTU_split
 
 import cv2 as cv
 import numpy as np
@@ -71,9 +71,9 @@ class TestPainting(unittest.TestCase):
         text = ocr_val(img)
         print(text)
 
-    def test_equalizeHist(self):
+    def test_equalize_hist(self):
         img = cv.imread("image/lena.png")
-        result = equalizeHist(img, local=False)
+        result = equalize_hist(img, local=False)
         show_image(result, format='rgb')
 
     def test_OSTU(self):

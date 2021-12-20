@@ -212,9 +212,9 @@ class ChineseSpliter(object):
         self.B = state_dict["B"]
 
 
-def kanji_cut(text, spliter=" "):
+def kanji_cut(text, spliter=" ",model_path="model/py_cut.pth"):
     model = ChineseSpliter(log_prob=False)
-    model.load_model("model/py_cut.pth")
+    model.load_model(model_path)
     result = []
     for sub_seq in text.split("。"):
         result += model.cut(text)
