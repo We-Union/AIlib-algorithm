@@ -194,6 +194,8 @@ class ChineseSpliter(object):
                 temp += O[i]
                 split_result.append(temp)
                 temp = ""
+        if len(temp) > 0:
+            split_result.append(temp)
         return split_result
     
     def save_model(self, path):
@@ -217,6 +219,6 @@ def kanji_cut(text, spliter=" ",model_path="model/py_cut.pth"):
     model.load_model(model_path)
     result = []
     for sub_seq in text.split("。"):
-        result += model.cut(text)
+        result += model.cut(sub_seq)
     result = spliter.join(result)
     return result

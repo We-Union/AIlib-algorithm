@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath("."))
 from main.algorithm.NLP import kanji_cut
 
 def u_kanji_cut():
-    text = "这是美好的一天"
+    text = "黄哲龙永远的神"
     result = kanji_cut(text)
     print(result)
 
