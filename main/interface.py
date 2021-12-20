@@ -21,7 +21,7 @@ register_cv_algorithm = {
     "transform_to_painting": transform_to_painting,
     "scanning": scanning,
     "reconstruct": reconstruct,
-    "face_detect" : detect_face,
+    "detect_face" : detect_face,
     "ocr_val" : ocr_val,
     "ocr_print" : ocr_print,
     "equalizeHist" : equalizeHist,

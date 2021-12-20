@@ -53,7 +53,9 @@ class Stitcher(object):
         result[:img2.shape[0], :img2.shape[1]] = img2
         return result
 
-def stitching(img1, img2, feature="akaze", ratio=0.75, reproThreshold=0.4):
+def stitching(imgs, feature="akaze", ratio=0.75, reproThreshold=0.4):
+    img1 = imgs[0]
+    img2 = imgs[1]
     stitcher = Stitcher(feature=feature)
     result = stitcher.stitch(img2, img1, ratio, reproThreshold)
     return cv.cvtColor(result, cv.COLOR_BGR2RGB)

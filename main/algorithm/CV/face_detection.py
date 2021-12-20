@@ -5,12 +5,13 @@ import torch.nn.functional as F
 import cv2
 from main.algorithm.CV.utils import resize, show_image
 
+
 def pad(image, stride=32):
     hasChange = False
     stdw = image.shape[1]
     if stdw % stride != 0:
         stdw += stride - (stdw % stride)
-        hasChange = True 
+        hasChange = True
 
     stdh = image.shape[0]
     if stdh % stride != 0:
@@ -24,8 +25,8 @@ def pad(image, stride=32):
     else:
         return image
 
-def nms(objs, iou=0.5):
 
+def nms(objs, iou=0.5):
     if objs is None or len(objs) <= 1:
         return objs
 
@@ -43,31 +44,32 @@ def nms(objs, iou=0.5):
                 flags[j] = 1
     return keep
 
+
 def exp(v):
     if isinstance(v, tuple) or isinstance(v, list):
         return [exp(item) for item in v]
     elif isinstance(v, np.ndarray):
         return np.array([exp(item) for item in v], v.dtype)
-    
+
     gate = 1
     base = np.exp(1)
     if abs(v) < gate:
         return v * base
-    
+
     if v > 0:
         return np.exp(v)
     else:
         return -np.exp(-v)
 
-class BBox:
-    def __init__(self, label, xyrb, score=0, landmark=None, rotate = False):
 
+class BBox:
+    def __init__(self, label, xyrb, score=0, landmark=None, rotate=False):
         self.label = label
         self.score = score
         self.landmark = landmark
         self.x, self.y, self.r, self.b = xyrb
         self.rotate = rotate
-        #避免出现rb小于xy的时候
+        # 避免出现rb小于xy的时候
         minx = min(self.x, self.r)
         maxx = max(self.x, self.r)
         miny = min(self.y, self.b)
@@ -75,9 +77,10 @@ class BBox:
         self.x, self.y, self.r, self.b = minx, miny, maxx, maxy
 
     def __repr__(self):
-        landmark_formated = ",".join([str(item[:2]) for item in self.landmark]) if self.landmark is not None else "empty"
+        landmark_formated = ",".join(
+            [str(item[:2]) for item in self.landmark]) if self.landmark is not None else "empty"
         return f"(BBox[{self.label}]: x={self.x:.2f}, y={self.y:.2f}, r={self.r:.2f}, " + \
-            f"b={self.b:.2f}, width={self.width:.2f}, height={self.height:.2f}, landmark={landmark_formated})"
+               f"b={self.b:.2f}, width={self.width:.2f}, height={self.height:.2f}, landmark={landmark_formated})"
 
     @property
     def width(self):
@@ -118,13 +121,13 @@ class BBox:
 
     # return cx, cy, cx.diff, cy.diff
     def safe_scale_center_and_diff(self, scale, limit_x, limit_y):
-        cx = clip_value((self.x + self.r) * 0.5 * scale, limit_x-1)
-        cy = clip_value((self.y + self.b) * 0.5 * scale, limit_y-1)
+        cx = clip_value((self.x + self.r) * 0.5 * scale, limit_x - 1)
+        cy = clip_value((self.y + self.b) * 0.5 * scale, limit_y - 1)
         return [int(cx), int(cy), cx - int(cx), cy - int(cy)]
 
     def safe_scale_center(self, scale, limit_x, limit_y):
-        cx = int(clip_value((self.x + self.r) * 0.5 * scale, limit_x-1))
-        cy = int(clip_value((self.y + self.b) * 0.5 * scale, limit_y-1))
+        cx = int(clip_value((self.x + self.r) * 0.5 * scale, limit_x - 1))
+        cy = int(clip_value((self.y + self.b) * 0.5 * scale, limit_y - 1))
         return [cx, cy]
 
     def clip(self, width, height):
@@ -137,6 +140,7 @@ class BBox:
     def iou(self, other):
         return computeIOU(self.box, other.box)
 
+
 def computeIOU(rec1, rec2):
     cx1, cy1, cx2, cy2 = rec1
     gx1, gy1, gx2, gy2 = rec2
@@ -146,15 +150,15 @@ def computeIOU(rec1, rec2):
     y1 = max(cy1, gy1)
     x2 = min(cx2, gx2)
     y2 = min(cy2, gy2)
- 
+
     w = max(0, x2 - x1 + 1)
     h = max(0, y2 - y1 + 1)
     area = w * h
     iou = area / (S_rec1 + S_rec2 - area)
     return iou
 
-def intv(*value):
 
+def intv(*value):
     if len(value) == 1:
         # one param
         value = value[0]
@@ -170,7 +174,6 @@ def intv(*value):
 
 
 def floatv(*value):
-
     if len(value) == 1:
         # one param
         value = value[0]
@@ -190,12 +193,11 @@ def clip_value(value, high, low=0):
 
 
 def pad(image, stride=32):
-
     hasChange = False
     stdw = image.shape[1]
     if stdw % stride != 0:
         stdw += stride - (stdw % stride)
-        hasChange = True 
+        hasChange = True
 
     stdh = image.shape[0]
     if stdh % stride != 0:
@@ -211,30 +213,30 @@ def pad(image, stride=32):
 
 
 def log(v):
-
     if isinstance(v, tuple) or isinstance(v, list) or isinstance(v, np.ndarray):
         return [log(item) for item in v]
-    
+
     base = np.exp(1)
     if abs(v) < base:
         return v / base
-    
+
     if v > 0:
         return np.log(v)
     else:
         return -np.log(-v)
-    
+
+
 def exp(v):
     if isinstance(v, tuple) or isinstance(v, list):
         return [exp(item) for item in v]
     elif isinstance(v, np.ndarray):
         return np.array([exp(item) for item in v], v.dtype)
-    
+
     gate = 1
     base = np.exp(1)
     if abs(v) < gate:
         return v * base
-    
+
     if v > 0:
         return np.exp(v)
     else:
@@ -257,9 +259,11 @@ def file_name(path):
     p0 = path.rfind("/") + 1
     return path[p0:]
 
+
 """
     model
 """
+
 
 class HSigmoid(nn.Module):
     def forward(self, x):
@@ -300,7 +304,8 @@ class Block(nn.Module):
         self.conv1 = nn.Conv2d(in_size, expand_size, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn1 = nn.BatchNorm2d(expand_size)
         self.nolinear1 = nolinear
-        self.conv2 = nn.Conv2d(expand_size, expand_size, kernel_size=kernel_size, stride=stride, padding=kernel_size//2, groups=expand_size, bias=False)
+        self.conv2 = nn.Conv2d(expand_size, expand_size, kernel_size=kernel_size, stride=stride,
+                               padding=kernel_size // 2, groups=expand_size, bias=False)
         self.bn2 = nn.BatchNorm2d(expand_size)
         self.nolinear2 = nolinear
         self.conv3 = nn.Conv2d(expand_size, out_size, kernel_size=1, stride=1, padding=0, bias=False)
@@ -319,7 +324,7 @@ class Block(nn.Module):
         out = self.bn3(self.conv3(out))
         if self.se != None:
             out = self.se(out)
-        out = out + self.shortcut(x) if self.stride==1 else out
+        out = out + self.shortcut(x) if self.stride == 1 else out
         return out
 
 
@@ -329,7 +334,7 @@ class CBNModule(nn.Module):
         self.conv = nn.Conv2d(inchannel, outchannel, kernel_size, stride, padding=padding, bias=bias)
         self.bn = nn.BatchNorm2d(outchannel)
         self.act = HSwish()
-    
+
     def forward(self, x):
         x = self.conv(x)
         x = self.bn(x)
@@ -338,13 +343,13 @@ class CBNModule(nn.Module):
 
 
 class UpModule(nn.Module):
-    def __init__(self, inchannel, outchannel=24, kernel_size=2, stride=2,  bias=False):
+    def __init__(self, inchannel, outchannel=24, kernel_size=2, stride=2, bias=False):
         super(UpModule, self).__init__()
         self.dconv = nn.Upsample(scale_factor=2)
         self.conv = nn.Conv2d(inchannel, outchannel, 3, padding=1, bias=bias)
         self.bn = nn.BatchNorm2d(outchannel)
         self.act = HSwish()
-    
+
     def forward(self, x):
         x = self.dconv(x)
         x = self.conv(x)
@@ -356,7 +361,7 @@ class UpModule(nn.Module):
 class ContextModule(nn.Module):
     def __init__(self, inchannel):
         super(ContextModule, self).__init__()
-    
+
         self.inconv = CBNModule(inchannel, inchannel, 3, 1, padding=1)
 
         half = inchannel // 2
@@ -365,7 +370,6 @@ class ContextModule(nn.Module):
         self.downconv2 = CBNModule(half, half, 3, 1, padding=1)
 
     def forward(self, x):
-
         x = self.inconv(x)
         up, down = torch.chunk(x, 2, dim=1)
         up = self.upconv(up)
@@ -377,7 +381,7 @@ class ContextModule(nn.Module):
 class DetectModule(nn.Module):
     def __init__(self, inchannel):
         super(DetectModule, self).__init__()
-    
+
         self.upconv = CBNModule(inchannel, inchannel, 3, 1, padding=1)
         self.context = ContextModule(inchannel)
 
@@ -396,41 +400,40 @@ class DBFace(nn.Module):
         self.hs1 = nn.ReLU(inplace=True)
 
         self.bneck = nn.Sequential(
-            Block(3, 16, 16, 16, nn.ReLU(inplace=True), None, 1),           # 0
-            Block(3, 16, 64, 24, nn.ReLU(inplace=True), None, 2),           # 1
-            Block(3, 24, 72, 24, nn.ReLU(inplace=True), None, 1),           # 2
-            Block(5, 24, 72, 40, nn.ReLU(inplace=True), SeModule(40), 2),   # 3
+            Block(3, 16, 16, 16, nn.ReLU(inplace=True), None, 1),  # 0
+            Block(3, 16, 64, 24, nn.ReLU(inplace=True), None, 2),  # 1
+            Block(3, 24, 72, 24, nn.ReLU(inplace=True), None, 1),  # 2
+            Block(5, 24, 72, 40, nn.ReLU(inplace=True), SeModule(40), 2),  # 3
             Block(5, 40, 120, 40, nn.ReLU(inplace=True), SeModule(40), 1),  # 4
             Block(5, 40, 120, 40, nn.ReLU(inplace=True), SeModule(40), 1),  # 5
-            Block(3, 40, 240, 80, HSwish(), None, 2),                       # 6
-            Block(3, 80, 200, 80, HSwish(), None, 1),                       # 7
-            Block(3, 80, 184, 80, HSwish(), None, 1),                       # 8
-            Block(3, 80, 184, 80, HSwish(), None, 1),                       # 9
-            Block(3, 80, 480, 112, HSwish(), SeModule(112), 1),             # 10
-            Block(3, 112, 672, 112, HSwish(), SeModule(112), 1),            # 11
-            Block(5, 112, 672, 160, HSwish(), SeModule(160), 1),            # 12
-            Block(5, 160, 672, 160, HSwish(), SeModule(160), 2),            # 13
-            Block(5, 160, 960, 160, HSwish(), SeModule(160), 1),            # 14
+            Block(3, 40, 240, 80, HSwish(), None, 2),  # 6
+            Block(3, 80, 200, 80, HSwish(), None, 1),  # 7
+            Block(3, 80, 184, 80, HSwish(), None, 1),  # 8
+            Block(3, 80, 184, 80, HSwish(), None, 1),  # 9
+            Block(3, 80, 480, 112, HSwish(), SeModule(112), 1),  # 10
+            Block(3, 112, 672, 112, HSwish(), SeModule(112), 1),  # 11
+            Block(5, 112, 672, 160, HSwish(), SeModule(160), 1),  # 12
+            Block(5, 160, 672, 160, HSwish(), SeModule(160), 2),  # 13
+            Block(5, 160, 960, 160, HSwish(), SeModule(160), 1),  # 14
         )
 
         self.conv2 = nn.Conv2d(160, 960, kernel_size=1, stride=1, padding=0, bias=False)
         self.bn2 = nn.BatchNorm2d(960)
         self.hs2 = HSwish()
 
-        self.conv3 = CBNModule(960, 320, kernel_size=1, stride=1, padding=0, bias=False) # 32
-        self.conv4 = CBNModule(320, 24, kernel_size=1, stride=1, padding=0, bias=False) # 32
+        self.conv3 = CBNModule(960, 320, kernel_size=1, stride=1, padding=0, bias=False)  # 32
+        self.conv4 = CBNModule(320, 24, kernel_size=1, stride=1, padding=0, bias=False)  # 32
         self.conn0 = CBNModule(24, 24, 1, 1)  # s4
         self.conn1 = CBNModule(40, 24, 1, 1)  # s8
         self.conn3 = CBNModule(160, 24, 1, 1)  # s16
 
-        self.up0 = UpModule(24, 24, 2, 2) # s16
-        self.up1 = UpModule(24, 24, 2, 2) # s8
-        self.up2 = UpModule(24, 24, 2, 2) # s4
+        self.up0 = UpModule(24, 24, 2, 2)  # s16
+        self.up1 = UpModule(24, 24, 2, 2)  # s8
+        self.up2 = UpModule(24, 24, 2, 2)  # s4
         self.cout = DetectModule(24)
         self.head_hm = nn.Conv2d(48, 1, 1)
         self.head_tlrb = nn.Conv2d(48, 1 * 4, 1)
         self.head_landmark = nn.Conv2d(48, 1 * 10, 1)
-
 
     def forward(self, x):
         out = self.hs1(self.bn1(self.conv1(x)))
@@ -458,7 +461,6 @@ class DBFace(nn.Module):
         tlrb = torch.exp(tlrb)
         return sigmoid_hm, tlrb, landmark
 
-
     def load(self, file):
         # print(f"load model: {file}")
 
@@ -467,6 +469,7 @@ class DBFace(nn.Module):
         else:
             checkpoint = torch.load(file, map_location=torch.device('cpu'))
         self.load_state_dict(checkpoint)
+
 
 def detect(img, model, mean, std, threshold, nms_iou):
     o_img = img
@@ -498,7 +501,7 @@ def detect(img, model, mean, std, threshold, nms_iou):
         x, y, r, b = box[:, cy, cx]
         xyrb = (np.array([cx, cy, cx, cy]) + [-x, -y, r, b]) * stride
         x5y5 = landmark[:, cy, cx]
-        x5y5 = (exp(x5y5 * 4) + ([cx]*5 + [cy]*5)) * stride
+        x5y5 = (exp(x5y5 * 4) + ([cx] * 5 + [cy] * 5)) * stride
         box_landmark = list(zip(x5y5[:5], x5y5[5:]))
         objs.append(BBox(0, xyrb=xyrb, score=score, landmark=box_landmark))
     objs = nms(objs, iou=nms_iou)
@@ -506,17 +509,19 @@ def detect(img, model, mean, std, threshold, nms_iou):
     bboxes = [obj.box for obj in objs]
     return bboxes
 
-MEAN = [0.408, 0.447, 0.47]
-STD  = [0.289, 0.274, 0.278]
 
-def dnn_detect(img, threshold : float = 0.4, nms_iou : float = 0.5):
+MEAN = [0.408, 0.447, 0.47]
+STD = [0.289, 0.274, 0.278]
+
+
+def dnn_detect(img, threshold: float = 0.4, nms_iou: float = 0.5):
     model = DBFace()
     model.load("./model/face.pth")
 
     bboxes = detect(img, model, MEAN, STD, threshold, nms_iou)
     for bbox in bboxes:
         cv2.rectangle(img, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (198, 198, 0), 2)
-    
+
     return img
 
 
@@ -524,16 +529,16 @@ def haar_detect(img, scaleFactor=1.3, minNeighbors=5):
     face_cascade = cv2.CascadeClassifier("model/haarcascade_frontalface_alt2.xml")
     face_cascade.load('model/haarcascade_frontalface_alt2.xml')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-    
-    for (x, y, w, h) in faces:
-        img = cv2.rectangle(img, (x, y), (x + w,y + h), (198, 198, 0), 2)
-    
-    return img
-    
 
-def detect_face(img, method="dnn", threshold : float = 0.4, nms_iou : float = 0.5, scaleFactor=1.3, minNeighbors=5):
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+
+    for (x, y, w, h) in faces:
+        img = cv2.rectangle(img, (x, y), (x + w, y + h), (198, 198, 0), 2)
+
+    return img
+
+
+def detect_face(img, method="dnn", threshold=0.4, nms_iou=0.5, scaleFactor=1.3, minNeighbors=5):
     if method == "dnn":
         result = dnn_detect(img, threshold, nms_iou)
     else:

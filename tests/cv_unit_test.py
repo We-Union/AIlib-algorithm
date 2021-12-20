@@ -50,7 +50,7 @@ def u_stitching():
     
     # show_image(np.concatenate([img1, img2], axis=1), width=1200)
 
-    result = stitching(img1, img2)
+    result = stitching([img1, img2])
     show_image(result, width=1500, format='rgb')
 
 def u_test_ocr():
@@ -71,7 +71,7 @@ def u_OSTU():
 
 # u_hrr()
 # u_face_detect()
-# u_stitching()
+u_stitching()
 # u_test_ocr()
 
-u_OSTU()
+# u_OSTU()
