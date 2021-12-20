@@ -543,4 +543,4 @@ def detect_face(img, method="dnn", threshold=0.4, nms_iou=0.5, scaleFactor=1.3, 
         result = dnn_detect(img, threshold, nms_iou)
     else:
         result = haar_detect(img, scaleFactor, minNeighbors)
-    return cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+    return cv2.cvtColor(result, cv2.COLOR_BGR2RGB),"分析成功"

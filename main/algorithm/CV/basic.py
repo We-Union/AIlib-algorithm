@@ -15,7 +15,7 @@ def equalizeHist(img, local=False, clipLimit=4.0, tileGridSize=4):
         result = cv.cvtColor(result, cv.COLOR_BGR2RGB)
     else:
         result = f(img)
-    return result
+    return result, "分析成功"
 
 def OSTU_split(img, blur_size=3, blur_std=1, reverse=False):
     if blur_size % 2 == 0:
@@ -26,4 +26,4 @@ def OSTU_split(img, blur_size=3, blur_std=1, reverse=False):
     _, binary = cv.threshold(img, 0, 255, cv.THRESH_OTSU)
     if reverse:
         binary = 255 - binary
-    return binary
+    return binary, "分析成功"

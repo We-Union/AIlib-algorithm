@@ -13,7 +13,7 @@ def ocr_val(img):
         ocr_bytes = f.read()
     text = sdk.predict(ocr_bytes)
     os.remove(temp_file)
-    return text
+    return None,text
 
 def ocr_print(img):
     sdk = muggle_ocr.SDK(model_type=muggle_ocr.ModelType.OCR)
@@ -23,4 +23,4 @@ def ocr_print(img):
     text = sdk.predict(ocr_bytes)
     os.remove(temp_file)
 
-    return text
+    return None,text

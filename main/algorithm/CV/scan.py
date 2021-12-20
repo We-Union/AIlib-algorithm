@@ -78,4 +78,4 @@ def scanning(img, height=500):
     # showImage(img)
     transformed = transform(img, screenCnt.reshape(4, 2))
     # showImage(transformed)
-    return cv.cvtColor(transformed, cv.COLOR_BGR2RGB)
+    return cv.cvtColor(transformed, cv.COLOR_BGR2RGB),"分析成功"

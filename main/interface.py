@@ -52,19 +52,21 @@ def main(data: str = None, model: str = None, param: dict = None):
         if not check_func_params(register_cv_algorithm[model], param):
             return check_return_code(6004)
 
-        output_image = register_cv_algorithm[model](img, **param)
+        output_image,output_text = register_cv_algorithm[model](img, **param)
 
         if isinstance(output_image, int):
             err_code = output_image
             return check_return_code(err_code)
-
-        url = upload_sm(global_token, output_image)
+        if output_image is None:
+            url = ""
+        else:
+            url = upload_sm(global_token, output_image)
 
         return {
             "code": 0,
             "msg": "",
             "output_img_url": url,
-            "output_text": "分析成功"
+            "output_text": output_text,
         }
 
     elif model in register_multi_cv_algorithm:

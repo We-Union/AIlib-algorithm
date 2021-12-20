@@ -58,4 +58,4 @@ def stitching(imgs, feature="akaze", ratio=0.75, reproThreshold=0.4):
     img2 = imgs[1]
     stitcher = Stitcher(feature=feature)
     result = stitcher.stitch(img2, img1, ratio, reproThreshold)
-    return cv.cvtColor(result, cv.COLOR_BGR2RGB)
+    return cv.cvtColor(result, cv.COLOR_BGR2RGB), "分析成功"

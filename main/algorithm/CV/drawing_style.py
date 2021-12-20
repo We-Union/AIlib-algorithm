@@ -37,5 +37,5 @@ def transform_to_painting(img, depth=100, blur=False, blur_size=3, blur_std=1, d
     img = np.array(img, dtype="uint8")
     if denoise:
         img = cv.medianBlur(img, ksize=denoise_size)
-    return img
+    return img,"分析成功"
 

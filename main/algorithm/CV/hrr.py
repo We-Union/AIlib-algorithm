@@ -30,11 +30,11 @@ def reconstruct(img, device=DEVICE, scale=4, outscale=0):
     h, w = img.shape[0], img.shape[1]
 
     is_gray = bool(len(img.shape) == 2)
-    
+
     img = cv.cvtColor(img, cv.COLOR_GRAY2RGB if is_gray else cv.COLOR_BGR2RGB)
     img = img / 255
     img = torch.FloatTensor(img.transpose((2, 0, 1))).unsqueeze(0).to(device)
-    
+
     with torch.no_grad():
         try:
             output = model(img)
@@ -49,11 +49,11 @@ def reconstruct(img, device=DEVICE, scale=4, outscale=0):
 
     if is_gray:
         out_img = cv.cvtColor(out_img, cv.COLOR_BGR2GRAY)
-    
+
     out_img = out_img * 255
     out_img = out_img.round().astype('uint8')
 
     if outscale != 0:
         out_img = resize(out_img, height=int(h * outscale))
-    
-    return cv.cvtColor(out_img, cv.COLOR_BGR2RGB)
+
+    return cv.cvtColor(out_img, cv.COLOR_BGR2RGB), "分析成功"
