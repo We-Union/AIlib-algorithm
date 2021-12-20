@@ -141,7 +141,7 @@ def main(data : str, model : str, param : dict):
 
 
 
-#### 8. equalizeHist（图像均衡化）
+#### 8. equalize_hist（图像均衡化）
 
 输入：`img`，代表一张图片。
 

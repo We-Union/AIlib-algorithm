@@ -13,7 +13,7 @@ from main.check import check_func_params, check_return_code
 
 from main.algorithm.CV import detect_face, transform_to_painting, url_imread, show_image
 from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
-from main.algorithm.CV import ocr_val, ocr_print, equalizeHist, OSTU_split
+from main.algorithm.CV import ocr_val, ocr_print, equalize_hist, OSTU_split
 from main.algorithm.NLP import kanji_cut
 
 
@@ -24,7 +24,7 @@ register_cv_algorithm = {
     "detect_face" : detect_face,
     "ocr_val" : ocr_val,
     "ocr_print" : ocr_print,
-    "equalizeHist" : equalizeHist,
+    "equalize_hist" : equalize_hist,
     "OSTU_split" : OSTU_split
 }
 
@@ -40,10 +40,11 @@ register_nlp_algorithm = {
 
 def main(data: str = None, model: str = None, param: dict = None):
     # init
-    global_token = get_sm_token("algorithm/config.json")
+
 
     # check if cv or nlp
     if model in register_cv_algorithm:
+        global_token = get_sm_token("algorithm/config.json")
         img_url = data
         try:
             img = url_imread(img_url)
@@ -70,6 +71,7 @@ def main(data: str = None, model: str = None, param: dict = None):
         }
 
     elif model in register_multi_cv_algorithm:
+        global_token = get_sm_token("algorithm/config.json")
         img_urls = data.split(",")
         try:
             img_list = [url_imread(url) for url in img_urls]
@@ -79,19 +81,26 @@ def main(data: str = None, model: str = None, param: dict = None):
         if not check_func_params(register_multi_cv_algorithm[model], param):
             return check_return_code(6004)
 
-        output_image = register_multi_cv_algorithm[model](img_list, **param)
+        output_image,output_text = register_multi_cv_algorithm[model](img_list, **param)
         url = upload_sm(global_token, output_image)
 
         return {
             "code": 0,
             "msg": "",
             "output_img_url": url,
-            "output_text": "分析成功"
+            "output_text": output_text
         }
 
     elif model in register_nlp_algorithm:
         if len(data) == 0:
             return check_return_code(6009)
+        output_text = register_nlp_algorithm[model](data, **param)
+
+        return {
+            "code": 0,
+            "msg": "",
+            "output_text": output_text
+        }
 
     else:
         return check_return_code(6001)

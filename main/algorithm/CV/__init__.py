@@ -7,5 +7,5 @@ from main.algorithm.CV.hrr import reconstruct
 from main.algorithm.CV.face_detection import detect_face
 from main.algorithm.CV.stitcher import stitching
 from main.algorithm.CV.ocr import ocr_val, ocr_print
-from main.algorithm.CV.basic import equalizeHist, OSTU_split
+from main.algorithm.CV.basic import equalize_hist, OSTU_split
 from main.algorithm.CV.utils import url_imread, show_image, resize

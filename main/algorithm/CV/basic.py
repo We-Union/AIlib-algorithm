@@ -1,6 +1,6 @@
 import cv2 as cv
 
-def equalizeHist(img, local=False, clipLimit=4.0, tileGridSize=4):
+def equalize_hist(img, local=False, clipLimit=4.0, tileGridSize=4):
     if local:
         clane = cv.createCLAHE(clipLimit=clipLimit, tileGridSize=(tileGridSize, tileGridSize))
         f = clane.apply
