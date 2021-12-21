@@ -15,6 +15,7 @@ from main.algorithm.CV import detect_face, transform_to_painting, url_imread, sh
 from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
 from main.algorithm.CV import ocr_val, ocr_print, equalize_hist, OSTU_split
 from main.algorithm.NLP import kanji_cut, detect_mood, topic_classifier, en2zh, zh2en
+from main.algorithm.NLP import generate_wordcloud, visual_wordvec
 
 
 register_cv_algorithm = {
@@ -38,7 +39,9 @@ register_nlp_algorithm = {
     "detect_mood" : detect_mood,
     "topic_classifier" : topic_classifier,
     "zh2en" : zh2en,
-    "en2zh" : en2zh
+    "en2zh" : en2zh,
+    "generate_wordcloud" : generate_wordcloud,
+    "visual_wordvec" : visual_wordvec
 }
 
 
@@ -86,6 +89,9 @@ def main(data: str = None, model: str = None, param: dict = None):
             return check_return_code(6004)
 
         output_image, output_text = register_multi_cv_algorithm[model](img_list, **param)
+        if isinstance(output_image, int):
+            err_code = output_image
+            return check_return_code(err_code)
         url = upload_sm(global_token, output_image)
 
         return {
@@ -100,9 +106,13 @@ def main(data: str = None, model: str = None, param: dict = None):
             return check_return_code(6009)
         output_image, output_text = register_nlp_algorithm[model](data, **param)
 
+        if isinstance(output_image, int):
+            err_code = output_image
+            return check_return_code(err_code)
+
         return {
             "code": 0,
-            "msg": "",
+            "msg": "" if output_image is None else output_image,
             "output_text": output_text
         }
 

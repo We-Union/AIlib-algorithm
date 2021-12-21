@@ -4,10 +4,13 @@ import unittest
 
 sys.path.append(os.path.abspath("."))
 
+from main.algorithm.CV  import show_image
 from main.algorithm.NLP import kanji_cut
 from main.algorithm.NLP import topic_classifier
 from main.algorithm.NLP import detect_mood
 from main.algorithm.NLP import en2zh, zh2en
+from main.algorithm.NLP import generate_wordcloud
+from main.algorithm.NLP import visual_wordvec
 
 
 class TestWeb(unittest.TestCase):
@@ -43,14 +46,22 @@ class TestWeb(unittest.TestCase):
             fp.write(result)
 
     def test_detect_mood(self):
-        text = "hello world, I am glad to see you"
-        _, text = en2zh(text)        
-        _, result = detect_mood(text)
+        text = "hello world, I am glad to see you"     
+        _, result = detect_mood(text, out_dict_str=False)
         
-        with open("text/test1.txt", "w", encoding="utf-8") as fp:
-            fp.write(text)
-            fp.write("\n")
-            fp.write(result)
+        self.assertEqual(result, "正面心情", "情感分类错误")   
+
+    def test_wordcloud(self):
+        with open("text/text2.txt", "r", encoding='utf-8') as fp:
+            text = fp.read().replace('\n', ' ') 
+        img, _ = generate_wordcloud(text, lag='zh', background_color='white')
+        show_image(img, format='rgb', width=1000)
+
+    def test_visual_wordvec(self):
+        with open("text/text3.txt", "r", encoding='utf-8') as fp:
+            word_list = fp.read().replace("\n", " ")
+        img, _ = visual_wordvec(word_list)
+        show_image(img)
 
 if __name__ == "__main__":
     unittest.main()

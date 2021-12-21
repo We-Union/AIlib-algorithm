@@ -71,5 +71,29 @@ def check_return_code(code):
             "output_text": "",
         }
 
+    elif code == 6010:
+        return {
+            "code" : 6010,
+            "msg": "超出支持语言",
+            "output_img_url": "",
+            "output_text": "",
+        }
+
+    elif code == 6011:
+        return {
+            "code" : 6011,
+            "msg": "词云文本不存在有效语义信息",
+            "output_img_url": "",
+            "output_text": "",
+        }
+    
+    elif code == 6012:
+        return {
+            "code" : 6012,
+            "msg": "词向量可视化输入单词都不在表中，试试两个字的名词",
+            "output_img_url": "",
+            "output_text": "",
+        }
+
 if __name__ == "__main__":
     ...
