@@ -42,13 +42,25 @@ class MoodNet(nn.Module):
         # out : [batch, time_step, output_dim]
         return out    
 
-    def predict(self, x, word2index):
+    def predict(self, x, word2index, out_dict_str=False):
         out = self(sentence2tensor(x, word2index))
+        out = nn.Softmax(dim=1)(out)
         label = ['负面心情', '正面心情']
         pre_lab = out.argmax(1)[0].item()
-        return label[pre_lab]
+        if out_dict_str:
+            print(out)
+            scores = [out[0][0].item(), out[0][1].item()]
+            out_str = """
+[score] 负面心情 : {}
+        正面心情 : {}
 
-def detect_mood(text):
+[result]         : {}
+            """.format(round(scores[0], 3), round(scores[1], 3), label[pre_lab])
+            return out_str
+        else:
+            return label[pre_lab]
+
+def detect_mood(text, out_dict_str=True):
     for w in text:
         if '\u4e00' <= w <= '\u9fff':
             _, text = zh2en(text)
@@ -60,4 +72,4 @@ def detect_mood(text):
     model = MoodNet(**param["Param"])
     model.load_state_dict(param['MoodNet'])
 
-    return None, model.predict(text, word2index)
+    return None, model.predict(text, word2index, out_dict_str=out_dict_str)

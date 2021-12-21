@@ -190,6 +190,9 @@ def main(data : str, model : str, param : dict):
 #### 3. detect_mood（情感检测）
 
 输入：`text`，代表一句话。输出“正面情感”或者“负面情感”这样的字符串。支持中英文。
+| 参数    | 类型值 | 范围\可选值 | 默认值 | 备注             |
+| ------- | ------ | ----------- | ------ | ---------------- |
+| out_dict_str | bool | true/false         | true    | true打印全部信息，否则只输出结果 |
 
 > 最多200个分词。
 
@@ -198,6 +201,9 @@ def main(data : str, model : str, param : dict):
 #### 4. topic_classifier（话题分类）
 
 输入：`text`，代表一句话。输出这句话代表的话题。
+| 参数    | 类型值 | 范围\可选值 | 默认值 | 备注             |
+| ------- | ------ | ----------- | ------ | ---------------- |
+| out_dict_str | bool | true/false         | true    | true打印全部信息，否则只输出结果 |
 
 > 最多400个分词
 

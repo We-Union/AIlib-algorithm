@@ -24,10 +24,23 @@ class NewsNet(nn.Module):
         out = self.fc1(r_out[:, -1, :])   # 选取最后一个时间点的out
         return out      
 
-    def predict(self, x, word2index, labelMap):
+    def predict(self, x, word2index, labelMap, out_dict_str=False):
         X = KanjiSentence2tensor(x, word2index)
-        out = self(X).argmax(1)[0].item()
-        return labelMap[out]
+        prob = self(X)
+        prob = nn.Softmax(dim=1)(prob)
+        out = prob.argmax(1)[0].item()
+        if out_dict_str:
+            out_str = ""
+            for i in labelMap:
+                if i == 0:
+                    out_str += '[score]  {} : {}\n'.format(labelMap[i], round(prob[0][i].item(), 3))
+                else:
+                    out_str += '         {} : {}\n'.format(labelMap[i], round(prob[0][i].item(), 3))
+            out_str         += '[result]      : {}'.format(labelMap[out])
+            return out_str
+
+        else:
+            return labelMap[out]
 
 def KanjiSentence2tensor(sentence, word2index):
     index_seq = []
@@ -39,9 +52,9 @@ def KanjiSentence2tensor(sentence, word2index):
     X = torch.LongTensor([index_seq])
     return X
 
-def topic_classifier(text):
+def topic_classifier(text, out_dict_str=True):
     state_dict = torch.load("model/NewsNet.pth")
     model = NewsNet(**state_dict['Param'])
     model.load_state_dict(state_dict['NewsNet'])
-    result = model.predict(text, state_dict['stoi'], state_dict['labelMap'])
+    result = model.predict(text, state_dict['stoi'], state_dict['labelMap'], out_dict_str=out_dict_str)
     return None, result
