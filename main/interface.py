@@ -14,7 +14,7 @@ from main.check import check_func_params, check_return_code
 from main.algorithm.CV import detect_face, transform_to_painting, url_imread, show_image
 from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
 from main.algorithm.CV import ocr_val, ocr_print, equalize_hist, OSTU_split
-from main.algorithm.NLP import kanji_cut, detect_mood, topic_classifier
+from main.algorithm.NLP import kanji_cut, detect_mood, topic_classifier, en2zh, zh2en
 
 
 register_cv_algorithm = {
@@ -36,7 +36,9 @@ register_multi_cv_algorithm = {
 register_nlp_algorithm = {
     "kanji_cut" : kanji_cut,
     "detect_mood" : detect_mood,
-    "topic_classifier" : topic_classifier
+    "topic_classifier" : topic_classifier,
+    "zh2en" : zh2en,
+    "en2zh" : en2zh
 }
 
 
