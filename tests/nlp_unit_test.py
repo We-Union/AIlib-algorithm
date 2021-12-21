@@ -1,12 +1,18 @@
 import sys
-import os  
+import os
 sys.path.append(os.path.abspath("."))
 
-from main.algorithm.NLP import kanji_cut
+from main.algorithm.NLP import detect_mood
+from main.algorithm.NLP import en2zh, zh2en
 
-def u_kanji_cut():
-    text = "黄哲龙永远的神"
-    result = kanji_cut(text)
+def u_detect_mood():
+    text = "hello world, I am glad to see you"
+    _, text = en2zh(text)    
+
+    print(text)
+    
+    _, result = detect_mood(text)
+
     print(result)
 
-u_kanji_cut()
+u_detect_mood()

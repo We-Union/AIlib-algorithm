@@ -221,4 +221,4 @@ def kanji_cut(text, spliter=" ",model_path="model/py_cut.pth"):
     for sub_seq in text.split("。"):
         result += model.cut(sub_seq)
     result = spliter.join(result)
-    return result
+    return None, result
