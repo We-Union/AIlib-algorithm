@@ -44,6 +44,8 @@ def visual_wordvec(text, decomposition_method="pca", s=120, alpha=0.9, fontsize=
     plt.figure(figsize=(width, height))
     plt.subplots_adjust(top=1, bottom=0, left=0, right=1, hspace=0, wspace=0)
     for index in index_seq:
+        plt.rcParams['font.sans-serif'] = ['simhei']  # 用来正常显示中文标签
+        plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
         point = embedding_matrix[index]
         plt.scatter(point[0], point[1], s=s, alpha=alpha)
         plt.text(point[0], point[1], state_dict['itos'][index], fontdict={"fontsize" : fontsize})
