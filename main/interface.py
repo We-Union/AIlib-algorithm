@@ -17,21 +17,20 @@ from main.algorithm.CV import ocr_val, ocr_print, equalize_hist, OSTU_split
 from main.algorithm.NLP import kanji_cut, detect_mood, topic_classifier, en2zh, zh2en
 from main.algorithm.NLP import generate_wordcloud, visual_wordvec, talk_to_chatbot
 
-
 register_cv_algorithm = {
     "transform_to_painting": transform_to_painting,
     "scanning": scanning,
     "reconstruct": reconstruct,
-    "detect_face" : detect_face,
-    "ocr_val" : ocr_val,
-    "ocr_print" : ocr_print,
-    "equalize_hist" : equalize_hist,
-    "OSTU_split" : OSTU_split
+    "detect_face": detect_face,
+    "ocr_val": ocr_val,
+    "ocr_print": ocr_print,
+    "equalize_hist": equalize_hist,
+    "OSTU_split": OSTU_split
 }
 
 register_multi_cv_algorithm = {
     "sift_matching": sift_matching,
-    "stitching" : stitching
+    "stitching": stitching
 }
 
 register_nlp_algorithm = {
@@ -60,7 +59,7 @@ def main(data: str = None, model: str = None, param: dict = None):
         if not check_func_params(register_cv_algorithm[model], param):
             return check_return_code(6004)
 
-        output_image,output_text = register_cv_algorithm[model](img, **param)
+        output_image, output_text = register_cv_algorithm[model](img, **param)
 
         if isinstance(output_image, int):
             err_code = output_image
@@ -91,7 +90,10 @@ def main(data: str = None, model: str = None, param: dict = None):
         if isinstance(output_image, int):
             err_code = output_image
             return check_return_code(err_code)
-        url = upload_sm(global_token, output_image)
+        if output_image is None:
+            url = ""
+        else:
+            url = upload_sm(global_token, output_image)
 
         return {
             "code": 0,
@@ -101,17 +103,19 @@ def main(data: str = None, model: str = None, param: dict = None):
         }
 
     elif model in register_nlp_algorithm:
+        global_token = get_sm_token("algorithm/config.json")
         if len(data) == 0:
             return check_return_code(6009)
         output_image, output_text = register_nlp_algorithm[model](data, **param)
-
         if isinstance(output_image, int):
             err_code = output_image
             return check_return_code(err_code)
+
         if isinstance(output_image, np.ndarray):
             url = upload_sm(global_token, output_image)
         else:
             url = ""
+            
         return {
             "code": 0,
             "msg": "" if output_image is None else output_image,
