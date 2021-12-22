@@ -227,7 +227,9 @@ class GreedySearchDecoder(nn.Module):
             decoder_hidden = current_hidden
         return predict_word_index, predict_confidence
 
-def talk_to_chatbot(text, max_length=20, out_dict_str=True):
+def talk_to_chatbot(text):
+    max_length = 60
+    out_dict_str = False
     # 载入模型和字典
     load_path = "model/chatbot.pth"
     # 模型有可能是在gpu上训练的，需要先把模型参数转换成cpu可以运算的类型

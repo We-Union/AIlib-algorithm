@@ -47,7 +47,7 @@ register_nlp_algorithm = {
 
 def main(data: str = None, model: str = None, param: dict = None):
     # init
-    global_token = get_sm_token("algorithm/config.json")
+
 
     # check if cv or nlp
     if model in register_cv_algorithm:
@@ -67,6 +67,7 @@ def main(data: str = None, model: str = None, param: dict = None):
         if output_image is None:
             url = ""
         else:
+            global_token = get_sm_token("algorithm/config.json")
             url = upload_sm(global_token, output_image)
 
         return {
@@ -93,6 +94,7 @@ def main(data: str = None, model: str = None, param: dict = None):
         if output_image is None:
             url = ""
         else:
+            global_token = get_sm_token("algorithm/config.json")
             url = upload_sm(global_token, output_image)
 
         return {
@@ -103,7 +105,7 @@ def main(data: str = None, model: str = None, param: dict = None):
         }
 
     elif model in register_nlp_algorithm:
-        global_token = get_sm_token("algorithm/config.json")
+
         if len(data) == 0:
             return check_return_code(6009)
         output_image, output_text = register_nlp_algorithm[model](data, **param)
@@ -112,6 +114,7 @@ def main(data: str = None, model: str = None, param: dict = None):
             return check_return_code(err_code)
 
         if isinstance(output_image, np.ndarray):
+            global_token = get_sm_token("algorithm/config.json")
             url = upload_sm(global_token, output_image)
         else:
             url = ""
