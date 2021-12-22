@@ -15,7 +15,7 @@ from main.algorithm.CV import detect_face, transform_to_painting, url_imread, sh
 from main.algorithm.CV import scanning, sift_matching, reconstruct, stitching
 from main.algorithm.CV import ocr_val, ocr_print, equalize_hist, OSTU_split
 from main.algorithm.NLP import kanji_cut, detect_mood, topic_classifier, en2zh, zh2en
-from main.algorithm.NLP import generate_wordcloud, visual_wordvec
+from main.algorithm.NLP import generate_wordcloud, visual_wordvec, talk_to_chatbot
 
 
 register_cv_algorithm = {
@@ -41,17 +41,17 @@ register_nlp_algorithm = {
     "zh2en" : zh2en,
     "en2zh" : en2zh,
     "generate_wordcloud" : generate_wordcloud,
-    "visual_wordvec" : visual_wordvec
+    "visual_wordvec" : visual_wordvec,
+    "talk_to_chatbot" : talk_to_chatbot
 }
 
 
 def main(data: str = None, model: str = None, param: dict = None):
     # init
-
+    global_token = get_sm_token("algorithm/config.json")
 
     # check if cv or nlp
     if model in register_cv_algorithm:
-        global_token = get_sm_token("algorithm/config.json")
         img_url = data
         try:
             img = url_imread(img_url)
@@ -78,7 +78,6 @@ def main(data: str = None, model: str = None, param: dict = None):
         }
 
     elif model in register_multi_cv_algorithm:
-        global_token = get_sm_token("algorithm/config.json")
         img_urls = data.split(",")
         try:
             img_list = [url_imread(url) for url in img_urls]
@@ -109,10 +108,14 @@ def main(data: str = None, model: str = None, param: dict = None):
         if isinstance(output_image, int):
             err_code = output_image
             return check_return_code(err_code)
-
+        if isinstance(output_image, np.ndarray):
+            url = upload_sm(global_token, output_image)
+        else:
+            url = ""
         return {
             "code": 0,
             "msg": "" if output_image is None else output_image,
+            "output_img_url": url,
             "output_text": output_text
         }
 

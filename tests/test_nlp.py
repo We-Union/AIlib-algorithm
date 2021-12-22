@@ -11,6 +11,7 @@ from main.algorithm.NLP import detect_mood
 from main.algorithm.NLP import en2zh, zh2en
 from main.algorithm.NLP import generate_wordcloud
 from main.algorithm.NLP import visual_wordvec
+from main.algorithm.NLP import talk_to_chatbot
 
 
 class TestWeb(unittest.TestCase):
@@ -62,6 +63,11 @@ class TestWeb(unittest.TestCase):
             word_list = fp.read().replace("\n", " ")
         img, _ = visual_wordvec(word_list)
         show_image(img)
+    
+    def test_chatbot(self):
+        text = "hello, what is your name ?"
+        _, response = talk_to_chatbot(text)
+        
 
 if __name__ == "__main__":
     unittest.main()

@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath("."))
 from main.algorithm.CV  import show_image
 from main.algorithm.NLP import detect_mood, topic_classifier
 from main.algorithm.NLP import en2zh, zh2en, generate_wordcloud
-from main.algorithm.NLP import visual_wordvec
+from main.algorithm.NLP import visual_wordvec, talk_to_chatbot
 
 import jieba.posseg as pseg
 
@@ -35,9 +35,13 @@ def u_visual_wordvec():
         vis_word = fp.read().replace("\n", " ")
     img, _ = visual_wordvec(vis_word, decomposition_method="PCA")
     show_image(img, width=1200)
-    
 
+def u_chatbot():
+    text = "hello, what is your name ?"
+    _, response = talk_to_chatbot(text)
+    print(response)
+    
 # u_detect_mood()
 # u_topic_classifier()
-
-u_visual_wordvec()
+# u_visual_wordvec()
+u_chatbot()
