@@ -107,13 +107,14 @@ def main(data: str = None, model: str = None, param: dict = None):
         if len(data) == 0:
             return check_return_code(6009)
         output_image, output_text = register_nlp_algorithm[model](data, **param)
+        if isinstance(output_image, int):
+            err_code = output_image
+            return check_return_code(err_code)
+
         if output_image is None:
             url = ""
         else:
             url = upload_sm(global_token, output_image)
-        if isinstance(output_image, int):
-            err_code = output_image
-            return check_return_code(err_code)
 
         return {
             "code": 0,
