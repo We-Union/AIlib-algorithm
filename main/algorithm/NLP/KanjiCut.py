@@ -5,6 +5,7 @@ from time import time
 import torch
 
 EPSILON = -3.14e100
+import re
 
 def viterbi(A, B, pi, O):
     """
@@ -218,7 +219,10 @@ def kanji_cut(text, spliter=" ",model_path="model/py_cut.pth"):
     model = ChineseSpliter(log_prob=False)
     model.load_model(model_path)
     result = []
-    for sub_seq in text.split("。"):
-        result += model.cut(sub_seq)
+    remove_chars = '[·’!"\#$%&\'\"()＃！”（）*+,-./:;<=>?\@，：?￥★、…．＞【】［］《》？“‘’\[\\]^_`{|}~+。 ；]'
+    for sub_seq in re.split(remove_chars, text):
+        if len(sub_seq) > 0:
+            result += model.cut(sub_seq)
+
     result = spliter.join(result)
     return None, result
